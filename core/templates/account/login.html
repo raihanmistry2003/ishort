@@ -1,0 +1,126 @@
+{% extends "user/base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+{% load account socialaccount %}
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block extra_head %}
+  <style>
+    .separator {
+        margin: 0px 0;
+        font-size: 18px;
+        font-weight: 300;
+      position: relative;
+        text-transform: uppercase;
+    }
+    .separator:before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: #dde0e2;
+        position: absolute;
+        top: 50%;
+    }
+    .t-center {
+        text-align: center;
+    }
+    .separator span {
+      padding: 5px 20px;
+      background: var(--bs-body-bg);
+      color: #828387;
+      position: relative;
+    }
+    .custom-margin{
+    margin-bottom: 10px;
+    }
+  </style>
+{% endblock extra_head %}
+  
+
+{% block content %}
+
+{% get_providers as socialaccount_providers %}
+
+<main class="d-flex w-100">
+  <div class="container d-flex flex-column">
+    <h1 class="mt-2">logo</h1>
+    <hr class="mb-0">
+    <div class="row vh-100">
+      <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
+        <div class="d-table-cell align-middle">
+
+          <div class="text-center mt-4">
+            <h1 class="h2">Welcome back!</h1>
+            <p>{% blocktrans %}If you have not created an account yet, then please
+              <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+            <div class="row">
+              {% if messages %}
+                <div>
+                  <strong>{% trans "Messages:" %}</strong>
+                  <ul>
+                    {% for message in messages %}
+                    <li class="text-danger">{{message}}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6 custom-margin">
+                <a href="#" class="btn text-white btn-lg"> Login with Facebook &nbsp<i class="fa-brands fa-facebook"></i> </a>
+              </div>
+              <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6 mb-sm-2 custom-margin">
+                <a href="{% provider_login_url 'google' %}" class="btn text-white btn-lg"> Login  with Google &nbsp<i class="fa-brands fa-google"></i> </a>
+              </div>
+            </div>
+          </div>
+          <p class="separator t-center">
+            <span>OR</span>
+          </p>
+          <div class="card">
+            <div class="card-body">
+              <div class="m-sm-3">
+                <form class="login" method="POST" action="{% url 'account_login' %}">
+                  {% csrf_token %}
+                  {% if form.non_field_errors %}
+                      <ul class='form-errors text-danger'>
+                          {% for error in form.non_field_errors %}
+                              <li>{{ error }}</li>
+                          {% endfor %}
+                      </ul>
+                  {% endif %}
+                  <div class="mb-3">
+                    <label class="form-label">Email ID</label>
+                    {% render_field form.login class="form-control form-control-lg" type="email" name="login" placeholder="Enter your email id"%}
+                    <div class="text-danger">
+                      {{ form.email.errors | safe }}
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    {% render_field form.password class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password"%}
+                    <div class="text-danger">
+                      {{ form.password.errors | safe }}
+                    </div>
+                  </div>
+                  {% comment %} {{ form.as_p }} {% endcomment %}
+                  {% if redirect_field_value %}
+                  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                  {% endif %}
+                  <div class="d-grid gap-2 mt-3">
+                    <button type="submit" class="btn btn-lg text-white">Sign in</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mb-3">
+            <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Lost your Password?" %}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

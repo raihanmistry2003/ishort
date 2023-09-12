@@ -1,0 +1,132 @@
+{% extends "User/base.html" %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+{% load socialaccount %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+
+{% block extra_head %}
+<style>
+  .separator {
+      margin: 0px 0;
+      font-size: 18px;
+      font-weight: 300;
+    position: relative;
+      text-transform: uppercase;
+  }
+  .separator:before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: #dde0e2;
+      position: absolute;
+      top: 50%;
+  }
+  .t-center {
+      text-align: center;
+  }
+  .separator span {
+    padding: 5px 20px;
+    background: var(--bs-body-bg);
+    color: #828387;
+    position: relative;
+}
+</style>
+{% endblock extra_head %}
+  
+  
+
+{% block content %}
+<main class="d-flex w-100">
+    <div class="container d-flex flex-column">
+      <h1 class="mt-2">logo</h1>
+      <hr class="mb-0">
+      <div class="row vh-100">
+        <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100 ">
+          <div class="d-table-cell align-middle">
+
+            <div class="text-center mt-3">
+              <h1 class="h2">Get started</h1>
+              <p class="lead">
+                <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+              </p>
+              {% if messages %}
+                <div>
+                  <strong>{% trans "Messages:" %}</strong>
+                  <ul>
+                    {% for message in messages %}
+                    <li class="text-danger">{{message}}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+              <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <a class="btn btn-lg text-white" href="{% provider_login_url 'google' %}" style="width: 100%;"><i class="fa-brands fa-google"></i> &nbsp Signup Using Google</a>
+                  </div>
+              </div>
+            </div>
+              <p class="separator t-center">
+                <span>OR</span>
+              </p>
+            <div class="card mt-2">
+              <div class="card-body">
+                <div class="m-sm-3">
+                  <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label class="form-label">Email ID</label>
+                        {% render_field form.email class="form-control form-control-lg" type="email" name="email" placeholder="Enter your email id"%}
+                        <div class="text-danger">
+                          {{ form.email.errors | safe }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        {% render_field form.first_name class="form-control form-control-lg" type="text" name="first_name" placeholder="Enter First Name"%}
+                        <div class="text-danger">
+                          {{ form.email.errors | safe }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        {% render_field form.last_name class="form-control form-control-lg" type="text" name="last_name" placeholder="Enter Last Name" %}
+                        <div class="text-danger">
+                          {{ form.email.errors | safe }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        {% render_field form.password1 class="form-control form-control-lg" type="password" name="password1" placeholder="Enter password" %}
+                        <div class="text-danger">
+                          {{ form.password1.errors | safe }}
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        {% render_field form.password2 class="form-control form-control-lg" type="password" name="password2" placeholder="Re-Enter password" %}
+                        <div class="text-danger">
+                          {{ form.password2.errors | safe }}
+                        </div>
+                      </div>
+                      <div class="d-grid gap-2 mt-3">
+                        <button type="submit" class="btn btn-lg btn-primary">Sign up</button>
+                      </div>
+                      {% comment %} {{ form.as_p }} {% endcomment %}
+                      {% if redirect_field_value %}
+                      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                      {% endif %}
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+{% endblock %}

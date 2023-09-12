@@ -1,0 +1,67 @@
+{% extends 'Dashboard/base.html' %}
+
+
+{% block title %}
+    Bulk Url Short
+{% endblock title %}
+
+
+{% block extra_head %}
+   
+{% endblock extra_head %}
+    
+
+{% block content %}
+<main class="content">
+    <div class="container-fluid p-0">
+
+        {% comment %} <h1 class="h3 mb-3">Blank Page</h1> {% endcomment %}
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Select File</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                              <label for="" class="form-label">Upload Excel File</label>
+                              <input type="file" class="form-control" name="file" accept=".xls,.xlsx, .csv" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Shorten Urls</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for url in shortened_urls %}
+                                <li>
+                                    Original URL: {{ url.long_url }}<br>
+                                    Short URL: {{ url.short_url }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+
+{% block extra_body %}
+
+{% endblock extra_body %}
+    
+    
